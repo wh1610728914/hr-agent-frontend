@@ -1,1 +1,21 @@
 @import "tailwindcss";
+/* 如果是 tailwind v3，用 @tailwind base; 等 */
+
+/* 强制去除默认边距并撑满全屏 */
+html,
+body,
+#app {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* 防止水平滚动条 */
+}
+
+/* Vite 默认生成的可能会导致页面缩在左边或中间，可以一并清掉 */
+body {
+    display: block !important;
+    place-items: unset !important;
+}
