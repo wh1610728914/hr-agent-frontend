@@ -107,7 +107,7 @@ const handleLogin = async () => {
       
       if(res.code === 200){
         ElMessage.success('登录成功')  
-        router.push('/homePage')
+        router.push('/manager')
       } else {
         ElMessage.error(res.message || '登录错误，请重新登录')
       }

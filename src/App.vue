@@ -4,7 +4,8 @@ import {  RouterView } from 'vue-router'
 </script>
 
 <template>
-  <RouterView />
+  <RouterView style="width: 100vw;"/>
+   
 </template>
 
 <style scoped>

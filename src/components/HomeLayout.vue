@@ -1,5 +1,6 @@
 <template>
-  <el-container style="min-height: 100vh">
+  
+  <el-container style="min-height: 100vh;">
     <el-header
       style="
         display: flex;
@@ -13,7 +14,7 @@
         <el-dropdown size="large" @command="handleCommand">
           <div style="margin-right: 10px; display: flex; align-items: center">
             <el-avatar :src="userInfo?.avatar" style="margin-right: 10px" />
-            <!-- <span>{{userInfo?.name}}</span> -->
+            <span>{{userInfo?.name}}</span>
             
           </div>
           <template #dropdown>
@@ -52,17 +53,15 @@
           </el-menu-item>
         </el-menu>
       </el-aside>
-      <el-main>
+      <el-main style="flex: 1; width: 0;">
         <router-view></router-view>
       </el-main>
     </el-container>
-  </el-container>
+  </el-container> 
 </template>
 <script setup lang="js">
 
 </script>
 <style scoped>
-.el-tooltip__trigger{
-  border:none !important
-}
+
 </style>
