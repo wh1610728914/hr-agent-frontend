@@ -67,7 +67,7 @@ import { Lock, User } from '@element-plus/icons-vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { reactive, ref } from 'vue'
 import AuthLayout from '@/components/AuthLayout.vue'
-import {loginApi, type LoginData} from '@/api/auth'
+import {loginApi, type LoginDataRequest} from '@/api/auth'
 import { useRouter } from 'vue-router'
 const loading = ref(false)
 const router = useRouter()
@@ -89,7 +89,7 @@ const loginRules: FormRules<typeof loginForm> = {
         message: '请输入正确的邮箱地址',
         trigger: ['blur', 'change'],
     },
-    ],
+  ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
     { min: 6, max: 20, message: '密码长度应为 6 到 20 个字符', trigger: 'blur' },
@@ -102,12 +102,12 @@ const handleLogin = async () => {
     if(!valid) return
     loading.value = true
     try{
-      const res = await loginApi(loginForm as LoginData)
+      const res = await loginApi(loginForm as LoginDataRequest)
       console.log(res);
       
       if(res.code === 200){
         ElMessage.success('登录成功')  
-        // router.push('/homePage')
+        router.push('/homePage')
       } else {
         ElMessage.error(res.message || '登录错误，请重新登录')
       }
