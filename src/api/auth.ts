@@ -13,8 +13,6 @@ export interface Response {
     code: number
     message: string
     data: Data
-
-
 }
 export function loginApi(data: LoginDataRequest) {
     // 登录
