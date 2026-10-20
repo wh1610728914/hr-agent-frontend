@@ -28,6 +28,8 @@ class HttpRequest {
         this.instance.interceptors.request.use((config) => {
             const userStore = useUserStore()
             const token = userStore.accessToken
+            console.log('token', token);
+
             if (token) {
                 config.headers.Authorization = `Bearer ${token}`
             }

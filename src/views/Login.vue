@@ -69,6 +69,7 @@ import { reactive, ref } from 'vue'
 import AuthLayout from '@/components/AuthLayout.vue'
 import {loginApi, type LoginDataRequest} from '@/api/auth'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 const loading = ref(false)
 const router = useRouter()
 // 没有初始值，所以得传类型！
@@ -106,6 +107,10 @@ const handleLogin = async () => {
       console.log(res);
       
       if(res.code === 200){
+        
+        const {access_token,user} = res.data
+        const userStore = useUserStore()
+        userStore.login(user,access_token)
         ElMessage.success('登录成功')  
         router.push('/manager')
       } else {
