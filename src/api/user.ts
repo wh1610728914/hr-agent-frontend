@@ -21,7 +21,22 @@ export interface PageResponse<T> {
     message: string
     data: PageData<T>
 }
+
 export function getUserList(data: UserListRequest) {
     // 获取列表
     return request.get<PageResponse<UserResponse>>('/user/list', data)
+}
+
+export interface Status {
+    ACTIVE: 'ACTIVE'
+    BLOCKED: 'BLOCKED'
+    RESIGNED: 'RESIGNED'
+}
+export interface UpdateRequest {
+    user_id: string
+    status: Status
+}
+export function updateUserStatus(data: UpdateRequest) {
+    // 修改员工状态
+    return request.patch<Response>('/user/update/status', data)
 }

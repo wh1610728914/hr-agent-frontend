@@ -31,8 +31,8 @@
             :min-width="item.width">
             <template #default="{row}">
                 <span v-if="item.prop === 'status'">
-                    <el-tag :type="row.status === 1 ? 'success' : 'danger'">
-                        {{ row.status === 1 ? '正常' : '禁用' }}
+                    <el-tag :type="row.status === 'ACTIVE' ? 'success' : 'danger'">
+                        {{ row.status === 'ACTIVE' ? '正常' : '禁用' }}
                     </el-tag>
                 </span>
                 <span v-if="item.type === 'bool'">
@@ -41,15 +41,17 @@
                 <span v-if="item.type === 'time'">
                    {{ row[item.prop] ? dayjs(row[item.prop]).format('YYYY-MM-DD') : '-' }}
                 </span>
-                
+                <span v-if="item.prop === 'departmentName'">
+                   {{ row.department.name }}
+                </span>
             </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" min-width="120">
+        <el-table-column fixed="right" label="操作" min-width="60">
             <template #default="{row}">
                 <el-button link type="primary" size="small" @click="handleUpdate(row)">
                     编辑
                 </el-button>
-                <el-button link type="primary" size="small" @click="handelDelete(row)">删除</el-button>
+                
             </template>
         </el-table-column>
     </el-table>
@@ -65,67 +67,74 @@
         />
     </div>
   </el-card>
-  <el-dialog v-model="dialogFormVisible" :title="dialogForm.id ? '编辑设备':'新增设备'" width="500">
-    <el-form :model="dialogForm" label-position="left" label-width="auto" :rules="rules" ref="dialogRef">
-      <el-form-item label="设备名称" prop="name">
-        <el-input v-model="dialogForm.name"  />
-      </el-form-item>
-      <el-form-item label="图片" >
-        <el-upload
-            class="avatar-uploader"
-            :http-request="handleUploadAvatar"
-            :show-file-list="false"
-            accept="image/jpeg,image/png,image/gif,image/webp"
-            :before-upload="beforeAvatarUpload"
-        >
-            <el-avatar shape="square"  :src="dialogForm.img" />
-        </el-upload>
-        
-      </el-form-item>
-      <el-form-item label="设备描述" >
-        <el-input v-model="dialogForm.description"  />
-      </el-form-item>
-      <el-form-item label="所属实验室" prop="lab_id">
-       
-        <el-select v-model="dialogForm.lab_id">
-            <el-option
-                v-for="item in labOptions"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-            />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="型号规格" >
-        <el-input v-model="dialogForm.spec"/>
-      </el-form-item>
-      <el-form-item label="数量" >
-        <el-input-number v-model="dialogForm.quantity" :min="1"/>
-      </el-form-item>
-      <el-form-item label="状态" >
-        <el-select v-model="dialogForm.status" placeholder="Select" style="width: 240px">
-            <el-option
-                key="0"
-                label="禁用"
-                :value="0"
-            />
-            <el-option
-                key="1"
-                label="启用"
-                :value="1"
-            />
-        </el-select>
-      </el-form-item>     
-    </el-form>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="handleSave" :loading="dialogLoading">
-          提交
-        </el-button>
-      </div>
-    </template>
-  </el-dialog>
+    <el-dialog v-model="dialogFormVisible" :title="dialogForm.id ? '编辑员工':'新增员工'" width="500">
+        <el-form :model="dialogForm" label-position="left" label-width="auto" :rules="rules" ref="dialogRef">
+            
+            <!-- 1. 用户名 -->
+            <el-form-item label="用户名" prop="username">
+            <el-input v-model="dialogForm.username" />
+            </el-form-item>
+
+            <!-- 2. 姓名 -->
+            <el-form-item label="姓名" prop="realname">
+            <el-input v-model="dialogForm.realname" />
+            </el-form-item>
+
+            <!-- 3. 邮箱 -->
+            <el-form-item label="邮箱" prop="email">
+            <el-input v-model="dialogForm.email" />
+            </el-form-item>
+
+            <!-- 4. 部门 -->
+            <el-form-item label="部门" prop="departmentName">
+                <el-select placeholder="请选择部门进行查询" 
+                    style="width:200px;margin:0 10px"
+                    v-model="dialogForm.departmentId"
+                    
+                >
+                    <el-option
+                        v-for="item in labOptions"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id"
+                    />
+                </el-select>
+            </el-form-item>
+
+          
+            
+
+            <!-- 6. 是否HR -->
+            <el-form-item label="是否HR" prop="is_hr">
+            <el-switch v-model="dialogForm.is_hr" />
+            </el-form-item>
+
+            <!-- 7. 是否部门Leader -->
+            <el-form-item label="是否部门Leader" prop="is_superuser">
+            <el-switch v-model="dialogForm.is_superuser" />
+            </el-form-item>
+
+            <!-- 8. 状态 -->
+            <el-form-item label="状态" prop="status">
+                <!-- 假设状态用下拉框 -->
+                <el-select v-model="dialogForm.status" placeholder="请选择状态" style="width: 100%">
+                    <el-option label="正常" value="ACTIVE" />
+                    <el-option label="锁定" value="BLOCKED" />
+                    <el-option label="离职" value="RESIGNED" />
+                </el-select>
+            </el-form-item>
+            
+        </el-form>
+
+        <template #footer>
+            <div class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取消</el-button>
+            <el-button type="primary" @click="handleSave" :loading="dialogLoading">
+                提交
+            </el-button>
+            </div>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup>
@@ -134,7 +143,8 @@ import {getDepartmentList} from '@/api/department'
 // import {getEquipAll,createEquip,updateEquip,deleteEquip} from '@/api/equip_api'
 import { dayjs, ElMessage,ElMessageBox } from 'element-plus';
 // import { updateFileApi } from '@/api/file_api';
-import {getUserList} from '@/api/user'
+import {getUserList,updateUserStatus} from '@/api/user'
+
 const tableColumns = [
     {
         prop:'username',
@@ -152,7 +162,7 @@ const tableColumns = [
         width:'200px'
     },
     {
-        prop:'department',
+        prop:'departmentName',
         label:'部门',
         width:'100px'
     },
@@ -188,23 +198,28 @@ const dialogRef = ref(null)
 let tableData = reactive([])
 const total = ref(0)
 const dialogForm = reactive({
-    name:'',
-    description:'',
-    img:'',
-    spec:'',
-    quantity:0,
-    status:1,
-    
+  id: null,
+  username: '',
+  realname: '',
+  email: '',
+  departmentId: '',
+  create_at: '',
+  is_hr: false,
+  is_superuser: false,
+  status: 'NORMAL', // 或 0/1，看你后端的定义
 })
 const labOptions = ref([])
+// 2. 表单校验规则（对应你表单里的必填项）
 const rules = reactive({
-  name: [
-    { required: true, message: '请输入实验室名称', trigger: 'blur' },
-    { min: 3, max: 5, message: '用户名长度应在 3 到 5 个字符之间', trigger: 'blur' }
+  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  realname: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+  email: [
+    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    { type: 'email', message: '请输入正确的邮箱格式', trigger: ['blur', 'change'] }
   ],
-  lab_id:[
-    {required: true, message: '请选择所属实验室', trigger: 'blur'}
-  ]
+  departmentId: [{ required: true, message: '请输入或选择部门', trigger: 'change' }],
+  create_at: [{ required: true, message: '请选择入职时间', trigger: 'change' }],
+  status: [{ required: true, message: '请选择状态', trigger: 'change' }]
 })
 const paginationData = reactive({
     page:1,
@@ -215,8 +230,6 @@ const paginationData = reactive({
 const loadLabOptions = async () => {
     const res = await getDepartmentList({page:1,size:10})
     labOptions.value = res.data?.list
-    console.log('ss',labOptions.value);
-    
 }
 const handleSearch = () => {
     getAllInfo()
@@ -288,18 +301,19 @@ const handelDelete = async (equip) => {
 }
 // 编辑
 const handleUpdate = async(equip) => {
-
-    
     dialogFormVisible.value = true
+    console.log(equip);
+    
     resetForm({
-        id:equip.id,
-        name:equip.name,
-        description:equip.description,
-        img:equip.img,
-        lab_id:equip.lab_id,
-        spec:equip.spec,
-        quantity:equip.quantity,
-        status:equip.status
+        id: equip.id,
+        username: equip.username,           // 对应原 equip.username
+        realname: equip.realname,           // 新增：姓名
+        email: equip.email,                 // 新增：邮箱
+        departmentId: equip.department.id, // 替换原 description（设备描述）
+        create_at: equip.create_at,         // 替换原 lab_id（所属实验室）或新增
+        is_hr: equip.is_hr,                 // 替换原 img 等字段
+        is_superuser: equip.is_superuser,   // 替换原 spec 等字段
+        status: equip.status                // 保持不变（对应员工状态）
     })
     // console.log(equip);
     
@@ -310,11 +324,13 @@ const handleSave = async () => {
     dialogLoading.value = true
     try {
         const res = dialogForm.id ? 
-                await updateEquip({'lab_id':dialogForm.id,...dialogForm}) : 
+                await updateUserStatus({'user_id':dialogForm.id,...dialogForm}) : 
                 await createEquip({...dialogForm})
         if(res.code === 200){
             ElMessage.success(dialogForm.id ? '编辑成功' : '新增成功')
             getAllInfo()
+        }else{
+            ElMessage.warning(res.message || '不可编辑')
         }
     } finally {
         dialogLoading.value = false

@@ -71,6 +71,11 @@ class HttpRequest {
             { ...config, method: 'PUT', url, data }
         )
     }
+    patch<T>(url: string, data?: unknown, config?: AxiosRequestConfig) {
+        return this.request<T>(
+            { ...config, method: 'PATCH', url, data }
+        )
+    }
     delete<T>(url: string, params?: unknown, config?: AxiosRequestConfig) {
         return this.request<T>(
             { ...config, method: 'DELETE', url, params }
