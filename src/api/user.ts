@@ -40,3 +40,8 @@ export function updateUserStatus(data: UpdateRequest) {
     // 修改员工状态
     return request.patch<Response>('/user/update/status', data)
 }
+
+export function getHrList(data: UserListRequest) {
+    // 获取hr总列表
+    return request.get<PageResponse<UserResponse>>('/hr/list', data)
+}
