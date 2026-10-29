@@ -9,6 +9,10 @@ export interface ApiResponse<T = unknown> {
     data: T
 }
 
+export interface NormalPageRequest {
+    page: number
+    size: number
+}
 // 封装axios 单例+封装 ,外部只拿到一个实例,调用用http
 class HttpRequest {
     private instance: AxiosInstance
