@@ -1,0 +1,1 @@
+import{t as e}from"./request-DNuzwTHI.js";function t(t){return e.get(`/depart/list`,t)}function n(t){return e.get(`/user/list`,t)}export{t as n,n as t};

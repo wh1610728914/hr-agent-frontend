@@ -124,7 +124,6 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
 import {getDepartmentList} from '@/api/department'
-// import {getEquipAll,createEquip,updateEquip,deleteEquip} from '@/api/equip_api'
 import { dayjs, ElMessage,ElMessageBox } from 'element-plus';
 // import { updateFileApi } from '@/api/file_api';
 import {getUserList,updateUserStatus} from '@/api/user'
@@ -313,9 +312,9 @@ const handleSave = async () => {
     if(!valid) return
     dialogLoading.value = true
     try {
-        const res = dialogForm.id ? 
-                await updateUserStatus({'user_id':dialogForm.id,...dialogForm}) : 
-                await createEquip({...dialogForm})
+        // const res = dialogForm.id ? 
+                // await updateUserStatus({'user_id':dialogForm.id,...dialogForm})  
+                // await createEquip({...dialogForm})
         if(res.code === 200){
             ElMessage.success(dialogForm.id ? '编辑成功' : '新增成功')
             getAllInfo()
